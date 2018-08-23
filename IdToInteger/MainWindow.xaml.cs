@@ -71,7 +71,12 @@ namespace IdToInteger
                 UInt32 valueInt = 0;
                 if (ComboBox_Type.SelectedItem == ComboBoxItem_Hex)
                 {
-                    valueInt = UInt32.Parse(TextBox_Integer.Text, System.Globalization.NumberStyles.HexNumber);
+                    string text = TextBox_Integer.Text;
+                    if (text.StartsWith("0x"))
+                    {
+                        text = text.Substring(2);
+                    }
+                    valueInt = UInt32.Parse(text, System.Globalization.NumberStyles.HexNumber);
                 }
                 else if (ComboBox_Type.SelectedItem == ComboBoxItem_Dec)
                 {
@@ -82,7 +87,7 @@ namespace IdToInteger
                     return;
                 }
                 
-                string valueID = ((char)((valueInt & 0xff000000) >> 24)).ToString() + ((char)((valueInt & 0xff0000) >> 16)).ToString() + ((char)((valueInt & 0xff00) >> 8)).ToString() + ((char)((valueInt & 0xff))).ToString();
+                string valueID = ((char)((valueInt & 0xff))).ToString() + ((char)((valueInt & 0xff00) >> 8)).ToString() + ((char)((valueInt & 0xff0000) >> 16)).ToString() + ((char)((valueInt & 0xff000000) >> 24)).ToString();
                 if (RegID.IsMatch(valueID))
                 {
                     ChangeStatus = ChangeStep.Wait;
